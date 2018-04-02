@@ -1,9 +1,3 @@
-FROM python:3.6
-WORKDIR /usr/src/app
-COPY requirements.txt ./
-RUN pip install --upgrade pip
-RUN pip install --no-cache-dir -r requirements.txt
-
 FROM debian:jessie-slim
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
@@ -96,6 +90,11 @@ ENTRYPOINT ["docker-entrypoint.sh"]
 EXPOSE 27017
 CMD ["mongod"]
 
+FROM python:3.6
+WORKDIR /usr/src/app
+COPY requirements.txt ./
+RUN pip install --upgrade pip
+RUN pip install --no-cache-dir -r requirements.txt
 RUN git clone https://github.com/swigodsky/Cryptocurrency /usr/src/app/Cryptocurrency
 EXPOSE 5000
 CMD [ "python", "/usr/src/app/Cryptocurrency/cryptocurrency.py" ]
