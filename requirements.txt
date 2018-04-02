@@ -1,0 +1,12 @@
+bs4
+json
+requests
+urllib3
+datetime
+dateutil
+pandas
+numpy
+mapplotlib
+pyplot
+pymongo
+prettytable
