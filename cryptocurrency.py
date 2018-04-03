@@ -58,7 +58,8 @@ def crypto_scraping():
 
 #user chooses the cryptocurrency to trade    
 def trade(crypto_df): 
-    print(crypto_df.head())
+    print('You may choose any cryptocurrency.  Here is a sample list.\n')
+    print(crypto_df.head(10))
     trade_sym = ''
     while trade_sym not in crypto_df['symbol'].values:  #user chooses a cryptocurrency
         trade_sym = input('Give the symbol of the cryptocurrency you would like to trade \n')
@@ -345,8 +346,9 @@ def profit_loss(blotter, crypto_df):
     
 def main():
  
-    client = MongoClient("localhost",27017) 
-    db = client.trader
+    MONGO_URI = "mongodb://test:test@ds113000.mlab.com:13000/wigdb"
+    client = MongoClient(MONGO_URI, connectTimeoutMS = 30000) 
+    db = client.get_database()
     blotter = db.blotter
     if blotter.count()==0:
         cash = 100000000
