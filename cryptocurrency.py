@@ -15,7 +15,6 @@ import matplotlib.pyplot as plt
 from pymongo import MongoClient
 from prettytable import PrettyTable
 
-
 def main_menu():    #function prints the menu on the screen and returns inputted value   print('Choose one of the following numbered options\n')
     number = '0'
     x = ['1','2','3','4']
@@ -346,7 +345,7 @@ def profit_loss(blotter, crypto_df):
     
 def main():
  
-    client = MongoClient()
+    client = MongoClient("localhost",27017) 
     db = client.trader
     blotter = db.blotter
     if blotter.count()==0:
