@@ -5,5 +5,8 @@ datetime
 pandas
 numpy
 matplotlib
+pyplot
 pymongo
 prettytable
+dateutil
+json
