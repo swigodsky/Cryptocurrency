@@ -12,7 +12,7 @@ from dateutil import parser
 import pandas as pd
 import numpy as np
 import matplotlib
-matplotlib.use('Agg')
+matplotlib.get_backend()
 import matplotlib.pyplot as plt
 
 from pymongo import MongoClient
