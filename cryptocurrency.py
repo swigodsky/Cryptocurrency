@@ -11,8 +11,7 @@ import datetime            #to determine the current date and time
 from dateutil import parser
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-
+import matplotlib.pyplot as plt 
 from pymongo import MongoClient
 from prettytable import PrettyTable
 
@@ -96,7 +95,7 @@ def price_chart(row_num, crypto_df):
         date.append(datenum)
         open_cost.append(float((cost_100days[i].text).split('\n')[2]))
         cost = pd.Series(open_cost, date)
-    print('  Date      Cost at 12am')
+    print('  Date    Cost in US Dollars at 12am')
     pd.set_option('display.max_rows', len(cost))
     print(cost)
 
@@ -109,7 +108,7 @@ def price_chart(row_num, crypto_df):
     plt.yticks(yspacing)
     plt.title('Cost of ' + name + ' For the Last 100 Days')
     plt.xlabel('Date')
-    plt.ylabel('Cost at 12 am')
+    plt.ylabel('Cost in US Dollars at 12 am')
     plt.tight_layout()
     plt.show()
 
@@ -122,7 +121,7 @@ def price_chart(row_num, crypto_df):
     plt.yticks(yspacing)
     plt.title('20 Day Moving Windown Average for ' + name)
     plt.xlabel('Date')
-    plt.ylabel('Cost at 12 am')
+    plt.ylabel('Cost in US Dollars at 12 am')
     plt.tight_layout()
     plt.show()
 
@@ -165,11 +164,15 @@ def buy(row_num, crypto_df, cash, blotter):
      name = crypto_df['name'][row_num]
      symbol = crypto_df['symbol'][row_num]
      dollars = -1
-     while dollars <=0:
-         dollars = float(input('How many dollars worth of ' + name + ' do you want to purchase?\n'))
-     if cash < dollars:
-         print('You do not have enough money for this purchase.\n')
-         return(cash)
+     while True & (dollars <= 0):     
+        try:
+            dollars = float(input('How many dollars worth of ' + name + ' do you want to purchase?\n'))
+            if cash < dollars:
+                print('You do not have enough money for this purchase.\n')
+        except ValueError:
+            print('Choose a number')
+            continue
+     
      price = price_scrape(symbol,'Ask',name)
           
      timenow = datetime.datetime.now()
@@ -184,14 +187,15 @@ def buy(row_num, crypto_df, cash, blotter):
      shares_buy = dollars/price
      shares_buy = round(shares_buy,2)
      cash = cash - dollars   
-     rpl = 0
      if blotter.find({'Ticker':symbol}).count()==0:
          position = shares_buy
          wap = price
+         rpl = 0
      else:
          for item in blotter.find({'Ticker':symbol}):
              lastposition = item['Position']
              wap = item['WAP']
+             rpl = item['RPL']
          position = lastposition + shares_buy
          wap  = (wap*lastposition + shares_buy*price)/(lastposition+shares_buy)
          wap = round(wap,2)
@@ -214,7 +218,14 @@ def buy(row_num, crypto_df, cash, blotter):
 def sell(row_num, crypto_df, cash, blotter):
      name = crypto_df['name'][row_num]
      symbol = crypto_df['symbol'][row_num]
-     dollars = float(input('How many dollars worth of ' + name + ' do you want to sell?\n'))
+
+     dollars = -1
+     while True & (dollars <= 0):     
+        try:
+            dollars = float(input('How many dollars worth of ' + name + ' do you want to sell?\n'))
+        except ValueError:
+            print('Choose a number')
+            continue
 
      price = price_scrape(symbol,'Bid',name)          
      timenow = datetime.datetime.now()
@@ -232,7 +243,7 @@ def sell(row_num, crypto_df, cash, blotter):
          for item in blotter.find({'Ticker':symbol}):
              lastposition = item['Position']
              wap = float(item['WAP'])
- #position is less than amount of shares trying to sell   
+#position is less than amount of shares trying to sell   
      if (lastposition==0) | (lastposition < share_sell):
          print('You do not currently have '+ str(share_sell) + ' shares of ' + name + '\n')
          print('You therefore cannot sell ' + name + '\n')
