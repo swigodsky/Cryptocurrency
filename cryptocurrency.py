@@ -11,8 +11,6 @@ import datetime            #to determine the current date and time
 from dateutil import parser
 import pandas as pd
 import numpy as np
-import matplotlib
-matplotlib.get_backend()
 import matplotlib.pyplot as plt
 
 from pymongo import MongoClient
