@@ -11,6 +11,8 @@ import datetime            #to determine the current date and time
 from dateutil import parser
 import pandas as pd
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt 
 from pymongo import MongoClient
 from prettytable import PrettyTable
@@ -110,7 +112,7 @@ def price_chart(row_num, crypto_df):
     plt.xlabel('Date')
     plt.ylabel('Cost in US Dollars at 12 am')
     plt.tight_layout()
-    plt.show()
+    plt.show(block=True)
 
     input('Press enter to view a graph of the 20 day moving avearge for ' + name +'\n')  
     rollmean = cost.rolling(window=20).mean()
@@ -123,7 +125,7 @@ def price_chart(row_num, crypto_df):
     plt.xlabel('Date')
     plt.ylabel('Cost in US Dollars at 12 am')
     plt.tight_layout()
-    plt.show()
+    plt.show(block=True)
 
     #collect data and print statistics of last 24 hours from cryptocompare.com API
     symbol = crypto_df['symbol'][row_num]
